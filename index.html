@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Stock - Gestão de Inventário</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="imagens/cabide.png" alt="Logo Stock" class="logo-img" onerror="this.style.display='none'">
+                <h1>Stock.</h1>
+            </div>
+            <nav class="nav-menu">
+                <button onclick="mostrarSecao('planta')">Planta Interativa</button>
+                <button onclick="mostrarSecao('tabela')">Tabela de Dados</button>
+                <button onclick="mostrarSecao('totais')">Totais</button>
+            </nav>
+            <div class="user-info">
+                <span>Utilizador: anasampaio@exemplo.pt</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        
+        <section id="secao-planta" class="sub-secao">
+            <h2>Planta Interativa da Loja</h2>
+            <p>Selecione um local na planta para simular ou registar uma nova contagem.</p>
+            
+            <div class="planta-container">
+                <div class="porta">Porta</div>
+                <div class="grid-planta">
+                    <div class="local-box" onclick="abrirModal(1)">Local 1 <span class="badge" id="badge-1">0</span></div>
+                    <div class="local-box" onclick="abrirModal(2)">Local 2 <span class="badge" id="badge-2">0</span></div>
+                    <div class="local-box" onclick="abrirModal(3)">Local 3 <span class="badge" id="badge-3">0</span></div>
+                    <div class="local-box" onclick="abrirModal(4)">Local 4 <span class="badge" id="badge-4">0</span></div>
+                    <div class="local-box" onclick="abrirModal(5)">Local 5 <span class="badge" id="badge-5">0</span></div>
+                    <div class="local-box" onclick="abrirModal(6)">Local 6 <span class="badge" id="badge-6">0</span></div>
+                    <div class="local-box" onclick="abrirModal(7)">Local 7 <span class="badge" id="badge-7">0</span></div>
+                    <div class="local-box" onclick="abrirModal(8)">Local 8 <span class="badge" id="badge-8">0</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="secao-tabela" class="sub-secao escondido">
+            <h2>Consulta da Tabela Interativa</h2>
+            <div class="table-wrapper">
+                <table id="tabela-inventario">
+                    <thead>
+                        <tr>
+                            <th>Local Horizontal</th>
+                            <th>Local Vertical</th>
+                            <th>Categoria</th>
+                            <th>Contagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="secao-totais" class="sub-secao escondido">
+            <h2>&Sigma; Totais Acumulados</h2>
+            <div class="totais-card">
+                <div class="total-item"><strong>Roupa Mulher:</strong> <span id="total-mulher">0</span> peças</div>
+                <div class="total-item"><strong>Roupa Homem:</strong> <span id="total-homem">0</span> peças</div>
+                <div class="total-item"><strong>Malas:</strong> <span id="total-malas">0</span> peças</div>
+                <div class="total-item"><strong>Sapatos:</strong> <span id="total-sapatos">0</span> peças</div>
+                <hr>
+                <div class="total-item somatorio"><strong>Somatório Total:</strong> <span id="total-geral">0</span> peças</div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="modal-contagem" class="modal escondido">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal()">&times;</span>
+            <h3>Inserir Contagem - Local <span id="modal-local-id"></span></h3>
+            
+            <form id="form-contagem" onsubmit="salvarContagem(event)">
+                <input type="hidden" id="input-local">
+                
+                <div class="form-group">
+                    <label for="input-vertical">Local Vertical (Secção):</label>
+                    <select id="input-vertical" required>
+                        <option value="A">Secção A</option>
+                        <option value="B">Secção B</option>
+                        <option value="C">Secção C</option>
+                        <option value="D">Secção D</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-categoria">Categoria:</label>
+                    <select id="input-categoria" required>
+                        <option value="Mulher">Roupa Mulher</option>
+                        <option value="Homem">Roupa Homem</option>
+                        <option value="Malas">Malas</option>
+                        <option value="Sapatos">Sapatos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-quantidade">Quantidade Contada:</label>
+                    <input type="number" id="input-quantidade" min="1" placeholder="Ex: 45" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Confirmar (OK)</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação (Base de dados simulada em memória)
+        let inventario = [
+            { localH: 1, localV: 'A', categoria: 'Mulher', quantidade: 110 },
+            { localH: 1, localV: 'B', categoria: 'Mulher', quantidade: 89 },
+            { localH: 2, localV: 'A', categoria: 'Malas', quantidade: 6 }
+        ];
+
+        // Alternar entre menus/secções
+        function mostrarSecao(secao) {
+            document.getElementById('secao-planta').classList.add('escondido');
+            document.getElementById('secao-tabela').classList.add('escondido');
+            document.getElementById('secao-totais').classList.add('escondido');
+
+            if (secao === 'planta') document.getElementById('secao-planta').classList.remove('escondido');
+            if (secao === 'tabela') document.getElementById('secao-tabela').classList.remove('escondido');
+            if (secao === 'totais') document.getElementById('secao-totais').classList.remove('escondido');
+        }
+
+        // Funções da Janela Modal
+        function abrirModal(localId) {
+            document.getElementById('modal-local-id').innerText = localId;
+            document.getElementById('input-local').value = localId;
+            document.getElementById('modal-contagem').classList.remove('escondido');
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-contagem').classList.add('escondido');
+            document.getElementById('form-contagem').reset();
+        }
+
+        // Gravar nova contagem
+        function salvarContagem(event) {
+            event.preventDefault();
+            
+            const localH = parseInt(document.getElementById('input-local').value);
+            const localV = document.getElementById('input-vertical').value;
+            const categoria = document.getElementById('input-categoria').value;
+            const quantidade = parseInt(document.getElementById('input-quantidade').value);
+
+            // Adiciona ao estado
+            inventario.push({ localH, localV, categoria, quantidade });
+
+            // Atualiza o ecrã
+            atualizarInterface();
+            fecharModal();
+        }
+
+        // Apagar registo
+        function eliminarRegisto(index) {
+            if(confirm("Tem a certeza que deseja eliminar este registo de inventário?")) {
+                inventario.splice(index, 1);
+                atualizarInterface();
+            }
+        }
+
+        // Atualizar todos os componentes dinâmicos do ecrã
+        function atualizarInterface() {
+            // 1. Atualizar Tabela
+            const tbody = document.querySelector('#tabela-inventario tbody');
+            tbody.innerHTML = '';
+            
+            // Dicionários para contagem na planta e totais
+            const totaisPorLocal = {};
+            const totaisPorCategoria = { Mulher: 0, Homem: 0, Malas: 0, Sapatos: 0 };
+            let somatorioGeral = 0;
+
+            inventario.forEach((item, index) => {
+                // Tabela
+                const row = `<tr>
+                    <td>${item.localH}</td>
+                    <td>${item.localV}</td>
+                    <td>${item.categoria}</td>
+                    <td>${item.quantidade}</td>
+                    <td><button class="btn-delete" onclick="eliminarRegisto(${index})">Eliminar</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+
+                // Somar para a planta
+                totaisPorLocal[item.localH] = (totaisPorLocal[item.localH] || 0) + item.quantidade;
+
+                // Somar para os totais gerais
+                totaisPorCategoria[item.categoria] += item.quantidade;
+                somatorioGeral += item.quantidade;
+            });
+
+            // 2. Atualizar Badges da Planta
+            for (let i = 1; i <= 8; i++) {
+                document.getElementById(`badge-${i}`).innerText = totaisPorLocal[i] || 0;
+            }
+
+            // 3. Atualizar Painel de Totais
+            document.getElementById('total-mulher').innerText = totaisPorCategoria['Mulher'];
+            document.getElementById('total-homem').innerText = totaisPorCategoria['Homem'];
+            document.getElementById('total-malas').innerText = totaisPorCategoria['Malas'];
+            document.getElementById('total-sapatos').innerText = totaisPorCategoria['Sapatos'];
+            document.getElementById('total-geral').innerText = somatorioGeral;
+        }
+
+        // Inicialização com os dados de demonstração do Wireframe
+        window.onload = atualizarInterface;
+    </script>
+</body>
+</html>
