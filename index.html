@@ -3,60 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Stock - Gestão de Inventário</title>
+    <title>Stock. // Gestão de Inventário Premium</title>
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="nav-container">
-            <div class="logo-section">
-                <img src="imagens/cabide.png" alt="Logo Stock" class="logo-img" onerror="this.style.display='none'">
-                <h1>Stock.</h1>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <aside class="sidebar">
+        <div class="brand-wrapper">
+            <div class="logo-container">
+                <img src="imagens/cabide.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+                <span class="logo-dot"></span>
             </div>
-            <nav class="nav-menu">
-                <button onclick="mostrarSecao('planta')">Planta Interativa</button>
-                <button onclick="mostrarSecao('tabela')">Tabela de Dados</button>
-                <button onclick="mostrarSecao('totais')">Totais</button>
-            </nav>
-            <div class="user-info">
-                <span>Utilizador: anasampaio@exemplo.pt</span>
+            <h2>Stock<span class="accent-text">.</span></h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" onclick="switchTab(event, 'planta')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/></svg>
+                Planta Interativa / Map
+            </button>
+            <button class="nav-btn" onclick="switchTab(event, 'tabela')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+                Painel de Dados / Table
+            </button>
+            <button class="nav-btn" onclick="switchTab(event, 'totais')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Métricas & Totais / Analytics
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">AB</div>
+            <div class="user-meta">
+                <p class="user-name">Anne Binotto</p>
+                <p class="user-role">Gestora de Stock</p>
             </div>
         </div>
-    </header>
+    </aside>
 
-    <main class="content">
+    <main class="main-layout">
         
-        <section id="secao-planta" class="sub-secao">
-            <h2>Planta Interativa da Loja</h2>
-            <p>Selecione um local na planta para simular ou registar uma nova contagem.</p>
-            
-            <div class="planta-container">
-                <div class="porta">Porta</div>
-                <div class="grid-planta">
-                    <div class="local-box" onclick="abrirModal(1)">Local 1 <span class="badge" id="badge-1">0</span></div>
-                    <div class="local-box" onclick="abrirModal(2)">Local 2 <span class="badge" id="badge-2">0</span></div>
-                    <div class="local-box" onclick="abrirModal(3)">Local 3 <span class="badge" id="badge-3">0</span></div>
-                    <div class="local-box" onclick="abrirModal(4)">Local 4 <span class="badge" id="badge-4">0</span></div>
-                    <div class="local-box" onclick="abrirModal(5)">Local 5 <span class="badge" id="badge-5">0</span></div>
-                    <div class="local-box" onclick="abrirModal(6)">Local 6 <span class="badge" id="badge-6">0</span></div>
-                    <div class="local-box" onclick="abrirModal(7)">Local 7 <span class="badge" id="badge-7">0</span></div>
-                    <div class="local-box" onclick="abrirModal(8)">Local 8 <span class="badge" id="badge-8">0</span></div>
+        <header class="top-bar">
+            <div class="header-title-area">
+                <span class="system-status">Sessão Ativa / Active Session</span>
+                <h1 id="page-dynamic-title">Dashboard de Contagem</h1>
+            </div>
+            <div class="header-actions">
+                <div class="clock" id="live-clock">00:00:00</div>
+            </div>
+        </header>
+
+        <section id="tab-planta" class="dashboard-section active-section">
+            <div class="section-intro">
+                <h2>Planta Arquitetónica da Loja / Store Blueprint</h2>
+                <p>Clique em qualquer zona ativa (Zonas 1-8) para abrir o terminal de contagem rápida e mapear o inventário.</p>
+            </div>
+
+            <div class="store-map-wrapper">
+                <div class="map-entrance">Entrada Principal / Main Entrance</div>
+                
+                <div class="store-grid">
+                    <div class="zone-card" onclick="openTerminal(1)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 01</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-1">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(2)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 02</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-2">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(3)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 03</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-3">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(4)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 04</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-4">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(5)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 05</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-5">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(6)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 06</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-6">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(7)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 07</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-7">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
+
+                    <div class="zone-card" onclick="openTerminal(8)">
+                        <div class="zone-header">
+                            <span class="zone-tag">ZONA 08</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="zone-body">
+                            <span class="total-qty" id="map-qty-8">0</span>
+                            <p>Artigos Totais / Total Items</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="secao-tabela" class="sub-secao escondido">
-            <h2>Consulta da Tabela Interativa</h2>
-            <div class="table-wrapper">
-                <table id="tabela-inventario">
+        <section id="tab-tabela" class="dashboard-section">
+            <div class="section-intro">
+                <h2>Registos de Auditoria Localizada / Audit Logs</h2>
+                <p>Lista detalhada de todas as entradas submetidas na base de dados simulada.</p>
+            </div>
+
+            <div class="modern-table-container">
+                <table id="stock-table">
                     <thead>
                         <tr>
-                            <th>Local Horizontal</th>
-                            <th>Local Vertical</th>
-                            <th>Categoria</th>
-                            <th>Contagem</th>
-                            <th>Ações</th>
+                            <th>Eixo Horizontal / Zone</th>
+                            <th>Eixo Vertical / Section</th>
+                            <th>Categoria / Category</th>
+                            <th>Unidades / Qty</th>
+                            <th style="text-align: right;">Ações / Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,159 +180,214 @@
             </div>
         </section>
 
-        <section id="secao-totais" class="sub-secao escondido">
-            <h2>&Sigma; Totais Acumulados</h2>
-            <div class="totais-card">
-                <div class="total-item"><strong>Roupa Mulher:</strong> <span id="total-mulher">0</span> peças</div>
-                <div class="total-item"><strong>Roupa Homem:</strong> <span id="total-homem">0</span> peças</div>
-                <div class="total-item"><strong>Malas:</strong> <span id="total-malas">0</span> peças</div>
-                <div class="total-item"><strong>Sapatos:</strong> <span id="total-sapatos">0</span> peças</div>
-                <hr>
-                <div class="total-item somatorio"><strong>Somatório Total:</strong> <span id="total-geral">0</span> peças</div>
+        <section id="tab-totais" class="dashboard-section">
+            <div class="section-intro">
+                <h2>Sumário Estatístico Global / Analytics</h2>
+                <p>Métricas consolidadas automaticamente agregadas por categoria e volume total de peças.</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="card-icon">👗</div>
+                    <div class="card-info">
+                        <h3>Roupa Mulher / Women</h3>
+                        <span class="metric-val" id="stat-mulher">0</span>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="card-icon">👔</div>
+                    <div class="card-info">
+                        <h3>Roupa Homem / Men</h3>
+                        <span class="metric-val" id="stat-homem">0</span>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="card-icon">👜</div>
+                    <div class="card-info">
+                        <h3>Malas / Bags</h3>
+                        <span class="metric-val" id="stat-malas">0</span>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="card-icon">👟</div>
+                    <div class="card-info">
+                        <h3>Sapatos / Shoes</h3>
+                        <span class="metric-val" id="stat-sapatos">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grand-total-panel">
+                <div class="total-text">
+                    <h2>Volume Total de Artigos em Loja / Total Stock</h2>
+                    <p>Mapeamento em tempo real do total acumulado de stock auditado.</p>
+                </div>
+                <div class="total-counter" id="stat-total-geral">0</div>
             </div>
         </section>
 
     </main>
 
-    <div id="modal-contagem" class="modal escondido">
-        <div class="modal-content">
-            <span class="close-btn" onclick="fecharModal()">&times;</span>
-            <h3>Inserir Contagem - Local <span id="modal-local-id"></span></h3>
+    <div id="terminal-modal" class="modal-overlay">
+        <div class="terminal-box">
+            <div class="terminal-header">
+                <h3>Terminal Input // Zona 0<span id="display-zone-id">0</span></h3>
+                <span class="close-terminal" onclick="closeTerminal()">&times;</span>
+            </div>
             
-            <form id="form-contagem" onsubmit="salvarContagem(event)">
-                <input type="hidden" id="input-local">
+            <form id="stock-form" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="form-zone-id">
                 
-                <div class="form-group">
-                    <label for="input-vertical">Local Vertical (Secção):</label>
-                    <select id="input-vertical" required>
-                        <option value="A">Secção A</option>
-                        <option value="B">Secção B</option>
-                        <option value="C">Secção C</option>
-                        <option value="D">Secção D</option>
+                <div class="input-block">
+                    <label>Identificador Vertical (Secção)</label>
+                    <select id="form-vertical" required>
+                        <option value="A">Secção Premium A</option>
+                        <option value="B">Secção Geral B</option>
+                        <option value="C">Secção C (Saldos)</option>
+                        <option value="D">Secção D (Armazém)</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="input-categoria">Categoria:</label>
-                    <select id="input-categoria" required>
+                <div class="input-block">
+                    <label>Categoria de Artigo</label>
+                    <select id="form-category" required>
                         <option value="Mulher">Roupa Mulher</option>
                         <option value="Homem">Roupa Homem</option>
-                        <option value="Malas">Malas</option>
-                        <option value="Sapatos">Sapatos</option>
+                        <option value="Malas">Malas & Acessórios</option>
+                        <option value="Sapatos">Sapatos / Calçado</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="input-quantidade">Quantidade Contada:</label>
-                    <input type="number" id="input-quantidade" min="1" placeholder="Ex: 45" required>
+                <div class="input-block">
+                    <label>Quantidade Física Detetada</label>
+                    <input type="number" id="form-quantity" min="1" placeholder="Ex: 45" required>
                 </div>
 
-                <button type="submit" class="btn-submit">Confirmar (OK)</button>
+                <div class="terminal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeTerminal()">Cancelar</button>
+                    <button type="submit" class="btn-confirm">Submeter Dados</button>
+                </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Estado da aplicação (Base de dados simulada em memória)
-        let inventario = [
+        // Dados iniciais baseados no projeto da Anne (Wireframe base)
+        let appState = [
             { localH: 1, localV: 'A', categoria: 'Mulher', quantidade: 110 },
             { localH: 1, localV: 'B', categoria: 'Mulher', quantidade: 89 },
             { localH: 2, localV: 'A', categoria: 'Malas', quantidade: 6 }
         ];
 
-        // Alternar entre menus/secções
-        function mostrarSecao(secao) {
-            document.getElementById('secao-planta').classList.add('escondido');
-            document.getElementById('secao-tabela').classList.add('escondido');
-            document.getElementById('secao-totais').classList.add('escondido');
-
-            if (secao === 'planta') document.getElementById('secao-planta').classList.remove('escondido');
-            if (secao === 'tabela') document.getElementById('secao-tabela').classList.remove('escondido');
-            if (secao === 'totais') document.getElementById('secao-totais').classList.remove('escondido');
+        // Mudar de Aba/Tabulação
+        function switchTab(event, tabId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dashboard-section').forEach(sec => sec.classList.remove('active-section'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active-section');
+            
+            const titles = {
+                'planta': 'Dashboard de Contagem',
+                'tabela': 'Registos Auditados',
+                'totais': 'Métricas de Performance'
+            };
+            document.getElementById('page-dynamic-title').innerText = titles[tabId];
         }
 
-        // Funções da Janela Modal
-        function abrirModal(localId) {
-            document.getElementById('modal-local-id').innerText = localId;
-            document.getElementById('input-local').value = localId;
-            document.getElementById('modal-contagem').classList.remove('escondido');
+        // Controladores da Janela do Terminal
+        function openTerminal(zoneId) {
+            document.getElementById('display-zone-id').innerText = zoneId;
+            document.getElementById('form-zone-id').value = zoneId;
+            document.getElementById('terminal-modal').classList.add('modal-visible');
         }
 
-        function fecharModal() {
-            document.getElementById('modal-contagem').classList.add('escondido');
-            document.getElementById('form-contagem').reset();
+        function closeTerminal() {
+            document.getElementById('terminal-modal').classList.remove('modal-visible');
+            document.getElementById('stock-form').reset();
         }
 
-        // Gravar nova contagem
-        function salvarContagem(event) {
+        // Gravar e Inserir Novo Registo
+        function handleFormSubmit(event) {
             event.preventDefault();
             
-            const localH = parseInt(document.getElementById('input-local').value);
-            const localV = document.getElementById('input-vertical').value;
-            const categoria = document.getElementById('input-categoria').value;
-            const quantidade = parseInt(document.getElementById('input-quantidade').value);
+            const localH = parseInt(document.getElementById('form-zone-id').value);
+            const localV = document.getElementById('form-vertical').value;
+            const categoria = document.getElementById('form-category').value;
+            const quantidade = parseInt(document.getElementById('form-quantity').value);
 
-            // Adiciona ao estado
-            inventario.push({ localH, localV, categoria, quantidade });
-
-            // Atualiza o ecrã
-            atualizarInterface();
-            fecharModal();
+            appState.push({ localH, localV, categoria, quantidade });
+            
+            renderUi();
+            closeTerminal();
         }
 
-        // Apagar registo
-        function eliminarRegisto(index) {
-            if(confirm("Tem a certeza que deseja eliminar este registo de inventário?")) {
-                inventario.splice(index, 1);
-                atualizarInterface();
+        // Apagar Registo da Tabela
+        function deleteRecord(index) {
+            if(confirm("Deseja remover permanentemente este registo de contagem?")) {
+                appState.splice(index, 1);
+                renderUi();
             }
         }
 
-        // Atualizar todos os componentes dinâmicos do ecrã
-        function atualizarInterface() {
-            // 1. Atualizar Tabela
-            const tbody = document.querySelector('#tabela-inventario tbody');
+        // Motor de Renderização de Interface (Cálculos de Totais e Planta)
+        function renderUi() {
+            const tbody = document.querySelector('#stock-table tbody');
             tbody.innerHTML = '';
             
-            // Dicionários para contagem na planta e totais
-            const totaisPorLocal = {};
-            const totaisPorCategoria = { Mulher: 0, Homem: 0, Malas: 0, Sapatos: 0 };
-            let somatorioGeral = 0;
+            const zoneTotals = {};
+            const categoryTotals = { Mulher: 0, Homem: 0, Malas: 0, Sapatos: 0 };
+            let totalVolume = 0;
 
-            inventario.forEach((item, index) => {
-                // Tabela
+            appState.forEach((item, index) => {
+                // Injeção da Tabela
                 const row = `<tr>
-                    <td>${item.localH}</td>
-                    <td>${item.localV}</td>
+                    <td><span class="table-zone-pill">Zona 0${item.localH}</span></td>
+                    <td><strong>Secção ${item.localV}</strong></td>
                     <td>${item.categoria}</td>
-                    <td>${item.quantidade}</td>
-                    <td><button class="btn-delete" onclick="eliminarRegisto(${index})">Eliminar</button></td>
+                    <td><span class="table-qty-badge">${item.quantidade}</span></td>
+                    <td style="text-align: right;">
+                        <button class="action-trash-btn" onclick="deleteRecord(${index})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </td>
                 </tr>`;
                 tbody.innerHTML += row;
 
-                // Somar para a planta
-                totaisPorLocal[item.localH] = (totaisPorLocal[item.localH] || 0) + item.quantidade;
-
-                // Somar para os totais gerais
-                totaisPorCategoria[item.categoria] += item.quantidade;
-                somatorioGeral += item.quantidade;
+                // Agregar valores matemáticos
+                zoneTotals[item.localH] = (zoneTotals[item.localH] || 0) + item.quantidade;
+                categoryTotals[item.categoria] += item.quantidade;
+                totalVolume += item.quantidade;
             });
 
-            // 2. Atualizar Badges da Planta
+            // Atualizar os Badges numéricos da Planta Interativa (Zonas 1 a 8)
             for (let i = 1; i <= 8; i++) {
-                document.getElementById(`badge-${i}`).innerText = totaisPorLocal[i] || 0;
+                document.getElementById(`map-qty-${i}`).innerText = zoneTotals[i] || 0;
             }
 
-            // 3. Atualizar Painel de Totais
-            document.getElementById('total-mulher').innerText = totaisPorCategoria['Mulher'];
-            document.getElementById('total-homem').innerText = totaisPorCategoria['Homem'];
-            document.getElementById('total-malas').innerText = totaisPorCategoria['Malas'];
-            document.getElementById('total-sapatos').innerText = totaisPorCategoria['Sapatos'];
-            document.getElementById('total-geral').innerText = somatorioGeral;
+            // Atualizar Painéis Estatísticos
+            document.getElementById('stat-mulher').innerText = categoryTotals['Mulher'];
+            document.getElementById('stat-homem').innerText = categoryTotals['Homem'];
+            document.getElementById('stat-malas').innerText = categoryTotals['Malas'];
+            document.getElementById('stat-sapatos').innerText = categoryTotals['Sapatos'];
+            document.getElementById('stat-total-geral').innerText = totalVolume;
         }
 
-        // Inicialização com os dados de demonstração do Wireframe
-        window.onload = atualizarInterface;
+        // Relógio do Sistema em Tempo Real
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
+        }, 1000);
+
+        // Inicialização Automática da App
+        window.onload = () => {
+            renderUi();
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
+        };
     </script>
 </body>
 </html>
